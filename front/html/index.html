@@ -96,8 +96,13 @@
         .innerText = value[1].name;*/
     
         for (let i=0; i < value.length; i++){
+          const lien = document.createElement("a");
+          document.getElementById("items").append(lien);
+          var liens = document.querySelectorAll("#items a");
           const article = document.createElement("article") ;
-          document.getElementById("items").append(article);
+          liens[i].appendChild(article);
+          
+          liens[i].setAttribute("href", "./product.html?" + value[i]._id);
           const image =document.createElement("img");
           const titre =document.createElement("h3");
           const description =document.createElement("p");
