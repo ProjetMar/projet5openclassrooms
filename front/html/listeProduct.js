@@ -1,3 +1,5 @@
+let elt = document.getElementById('items');
+
 fetch("http://localhost:3000/api/products")
       .then(function(res) {
       if (res.ok) {
@@ -5,36 +7,16 @@ fetch("http://localhost:3000/api/products")
       }
       })
       .then(function(value) {
-        /*document
-        .getElementById("items")
-        .innerText = value[1].name;*/
+       
     
         for (let i=0; i < value.length; i++){
-          const lien = document.createElement("a");
-          document.getElementById("items").append(lien);
-          var liens = document.querySelectorAll("#items a");
-          const article = document.createElement("article") ;
-          liens[i].appendChild(article);
-          
-          liens[i].setAttribute("href", "./product.html?" + value[i]._id);
-          const image =document.createElement("img");
-          const titre =document.createElement("h3");
-          const description =document.createElement("p");
-          var articles = document.querySelectorAll("#items article");
-          articles[i].appendChild(image);
-          articles[i].appendChild(titre);
-          articles[i].appendChild(description);
-         
-          image.setAttribute("src" , value[i].imageUrl);
-          image.setAttribute("alt", value[i].altTxt);
 
-          titre.innerText=value[i].name;
-
-          description.innerText=value[i].description;
-          /*article.innerText =value[i].name;*/
+            elt.innerHTML+="<a href=./product.html?id=" + value[i]._id + "><article><img src='" + value[i].imageUrl + "'" + "alt=" +'" '+  value[i].altTxt +'"' + "><h3>"
+             + value[i].name + "</h3><p>" + value[i].description + "</p></article></a>"
+        
         }
+
        console.log(value);
-      
 
       })
       .catch(function(err) {
