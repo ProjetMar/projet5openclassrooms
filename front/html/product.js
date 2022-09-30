@@ -38,55 +38,80 @@ fetch(apiProduit)
 
 
         
+
 let colorSelect = '';
 let quantity = 0;
-let produitSelect = {};
+
+
   
-
-function produit() {
-elt.addEventListener('change', retour);
-
 function retour(e){
-  
+  e.stopPropagation();
   colorSelect = e.target.value;
   console.log(colorSelect);
+  
  
 };
 
-document.getElementById('quantity').addEventListener('input', quantitys);
-
 function quantitys (e){
+  e.stopPropagation();
   quantity = e.target.valueAsNumber;
   console.log(quantity);
-}
-produitSelect={ id, colorSelect, quantity};
-return(produitSelect);
+  
+};
+elt.addEventListener('change', retour);
+document.getElementById('quantity').addEventListener('input', quantitys);
+
+  
+
+  
+
+let tab= new Array;
+//let pro = produitSelect;
+let tableau = new Array(); 
+
+
+document.getElementById('addToCart').addEventListener('click', cart);
+
+
+function cart(){
+  
+  let produitSelect = new Object();
+
+  produitSelect.id = id;
+  produitSelect.colorSelect = colorSelect;
+  produitSelect.quantity = quantity;
+  let found = false;
+
+  if (tableau.length == 0){
+ 
+    tableau.push(produitSelect);  
+    
+  }else{
+    for (let i=0;  i< tableau.length;  i++ ){
+      
+   
+      if ( tableau[i].id == produitSelect.id  && tableau[i].colorSelect == produitSelect.colorSelect ) {
+        x = tableau[i].quantity;
+        y = produitSelect.quantity;
+        z = x + y ; 
+        produitSelect.quantity = z;
+        tableau.splice(i, 1 , produitSelect) ;
+     
+        found = true; 
+      };
+      
+    };
+    if (found == false){
+      tableau.push(produitSelect);  
+    }
+  };
+    
+    
+
+ 
 
 };
 
-
- document.getElementById('addToCart').addEventListener('click', cart);
- let tab = [];
- function cart(){
-  if (tab.length){
-    for (let i=0;  i< tab.length;  i++ ){
-
-      if (produit().id == tab[i].id && produit().colorSelect == tab[i].colorSelect ) {
-        
-          
-          tab[i].quantity=tab[i].quantity+1;
-         
-      }else {
-        tab.push(produit());
-      }
-    }
-  }else{
-    tab.push(produit());
-  }
-
-  
-  return(tab);
-  
- };
+//tableau.push(cart());
  
  
