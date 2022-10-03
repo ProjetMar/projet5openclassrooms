@@ -1,6 +1,6 @@
 let elt = document.getElementById('items');
-
-fetch("http://localhost:3000/api/products")
+let Url = "http://localhost:3000/api/products";
+fetch(Url)
       .then(function(res) {
       if (res.ok) {
         return res.json();
