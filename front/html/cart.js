@@ -10,14 +10,13 @@ let prices = [];
 
 let Url = "http://localhost:3000/api/products";
 fetch(Url)
-      .then(function(res) {
-      if (res.ok) {
+.then(function(res) {
+    if (res.ok) {
         return res.json();
       }
-      })
-      .then(function(value) {
-       
-    
+    })
+    .then(function(value) {
+        
         for (let i=0; i < produits.length; i++){
             for (let j=0; j< value.length ; j++){
                 if (produits[i].id == value[j]._id){
@@ -37,11 +36,14 @@ fetch(Url)
 
        
        modifierPanier(quantitysSelect, deletProduitsSelect);
-       
-      })
-      .catch(function(err) {
+
+
+
+    })
+
+    .catch(function(err) {
       // Une erreur est survenue
-      });   
+    });   
 
 function modifierPanier(){
     
@@ -122,5 +124,100 @@ function quantityF(e){
     localStorage.setItem("produit", JSON.stringify(produits));
 };
 
+// verification des formulaires 
+
+
+document.getElementById('firstName').addEventListener("input", function(e) {
+
+    let myInput = document.getElementById('firstName');
+    let myRegex = /^[a-zA-Z-\s]+$/;
+    if (myInput.value.trim()==""){
+        let myError = document.getElementById('firstNameErrorMsg');
+        myError.innerHTML="le champ de firstname est requis. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+    }else if(myRegex.test(myInput.value)==false){
+        let myError =document.getElementById('firstNameErrorMsg');
+        myError.innerHTML ="le prénom doit comporter des lettres et des tirets uniquement. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+    };
+});
+document.getElementById('lastName').addEventListener("input", function(e) {
+
+    let myInput = document.getElementById('lastName');
+    let myRegex = /^[a-zA-Z-\s]+$/;
+    if (myInput.value.trim()==""){
+        let myError = document.getElementById('lastNameErrorMsg');
+        myError.innerHTML="le champ de firstname est requis. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+    }else if(myRegex.test(myInput.value)==false){
+        let myError =document.getElementById('lastNameErrorMsg');
+        myError.innerHTML ="le nom doit comporter des lettres et des tirets uniquement. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+    };
+});
+document.getElementById('email').addEventListener("input", function(e) {
+
+    let myInput = document.getElementById('email');
+    let myRegex = /^([a-zA-Z0-9_-])+([.]?[a-zA-Z0-9_-]{1,})*@([a-zA-Z0-9-_]{2,}[.])+[a-zA-Z]{2,3}$/;
+    if (myInput.value.trim()==""){
+        let myError = document.getElementById('emailErrorMsg');
+        myError.innerHTML="le champ email est requis. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+    }else if(myRegex.test(myInput.value)==false){
+        let myError =document.getElementById('emailErrorMsg');
+        myError.innerHTML ="l'adresse mail est invalide. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+    };
+});
+
+function send (e){
+    e.preventDefault();
+    let products = [];
+    for (let i=0; i< produits.length; i++){
+        products.push(produits[i].id);
+    }
+    let contact = {};
+    contact.firstName= document.getElementById("firstName").value;
+    contact.lastName= document.getElementById("lastName").value;
+    contact.address= document.getElementById("address").value;
+    contact.city = document.getElementById("city").value;
+    contact.email = document.getElementById("email").value;
+    let Aenvoyer = {
+        products, contact
+    }
+    let options =  fetch(Url +"/order",{
+             method: "POST",
+             body: JSON.stringify(Aenvoyer),
+             headers: {
+                 "Accept": "application/json",
+                 "Content-Type" : "application/json"
+             }
+         });
+         options.then(async(response)=>{
+            try{
+                const contenue = await response.json();
+                console.log(contenue)
+                //Si la réponse du serveur est OK
+                if (response.ok){
+                   let orderId = contenue.orderId ;
+                   console.log(orderId);
+                   window.location.href = "./confirmation.html?orderid=" + orderId ;
+                 
+                }
+            }
+            catch(e){
+                //On demande l'erreur dans la console
+                console.log(e);
+            }
+         })   
     
 
+};
+const form1 = document.getElementsByClassName("cart__order__form")
+form1[0].addEventListener("submit", send);
