@@ -124,8 +124,20 @@ function quantityF(e){
     localStorage.setItem("produit", JSON.stringify(produits));
 };
 
+//fonction pour activer ou désactiver le bouton commander 
+/*function disableSubmit(disabled) {
+    let formulaire = document.getElementsByClassName("cart__order__form");
+    /*let form1 = formulaire[0];*/
+  /*  if (disabled) {
+        formulaire[0].setAttribute("disabled", true);
+    } else {
+        
+        formulaire[0].removeAttribute("disabled");
+    }
+  }
 // verification des formulaires 
 
+disableSubmit(false);
 
 document.getElementById('firstName').addEventListener("input", function(e) {
 
@@ -136,13 +148,16 @@ document.getElementById('firstName').addEventListener("input", function(e) {
         myError.innerHTML="le champ de firstname est requis. ";
         myError.style.color = 'black';
         e.preventDefault();
+        disableSubmit(true);
     }else if(myRegex.test(myInput.value)==false){
         let myError =document.getElementById('firstNameErrorMsg');
         myError.innerHTML ="le prénom doit comporter des lettres et des tirets uniquement. ";
         myError.style.color = 'black';
         e.preventDefault();
+        disableSubmit(true);
     };
 });
+
 document.getElementById('lastName').addEventListener("input", function(e) {
 
     let myInput = document.getElementById('lastName');
@@ -152,11 +167,13 @@ document.getElementById('lastName').addEventListener("input", function(e) {
         myError.innerHTML="le champ de firstname est requis. ";
         myError.style.color = 'black';
         e.preventDefault();
+        disableSubmit(true);
     }else if(myRegex.test(myInput.value)==false){
         let myError =document.getElementById('lastNameErrorMsg');
         myError.innerHTML ="le nom doit comporter des lettres et des tirets uniquement. ";
         myError.style.color = 'black';
         e.preventDefault();
+        disableSubmit(true);
     };
 });
 document.getElementById('email').addEventListener("input", function(e) {
@@ -168,54 +185,108 @@ document.getElementById('email').addEventListener("input", function(e) {
         myError.innerHTML="le champ email est requis. ";
         myError.style.color = 'black';
         e.preventDefault();
+        disableSubmit(true);
     }else if(myRegex.test(myInput.value)==false){
         let myError =document.getElementById('emailErrorMsg');
         myError.innerHTML ="l'adresse mail est invalide. ";
         myError.style.color = 'black';
         e.preventDefault();
+        disableSubmit(true);
     };
-});
+});*/
 
 function send (e){
     e.preventDefault();
+    let activeBouton = true ; 
+    // verification de firstName
+    let myRegex1 = /^[a-zA-Z-\s]+$/;
+    let myRegex2 = /^([a-zA-Z0-9_-])+([.]?[a-zA-Z0-9_-]{1,})*@([a-zA-Z0-9-_]{2,}[.])+[a-zA-Z]{2,3}$/;
+    if ( document.getElementById("firstName").value.trim()==""){
+        let myError = document.getElementById('firstNameErrorMsg');
+        myError.innerHTML="le champ de firstname est requis. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+        activeBouton = false ; 
+    }else if(myRegex1.test( document.getElementById("firstName").value)==false){
+        let myError =document.getElementById('firstNameErrorMsg');
+        myError.innerHTML ="le prénom doit comporter des lettres et des tirets uniquement. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+        activeBouton = false ; 
+    };
+    // verification de lastName
+    if (document.getElementById("lastName").value.trim()==""){
+        let myError = document.getElementById('lastNameErrorMsg');
+        myError.innerHTML="le champ de firstname est requis. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+        activeBouton = false ; 
+    }else if(myRegex1.test(document.getElementById("lastName").value)==false){
+        let myError =document.getElementById('lastNameErrorMsg');
+        myError.innerHTML ="le nom doit comporter des lettres et des tirets uniquement. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+        activeBouton = false ; 
+    };
+    // verification de email
+    if (document.getElementById("email").value.trim()==""){
+        let myError = document.getElementById('emailErrorMsg');
+        myError.innerHTML="le champ email est requis. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+        activeBouton = false ; 
+    }else if(myRegex2.test(document.getElementById("email").value)==false){
+        let myError =document.getElementById('emailErrorMsg');
+        myError.innerHTML ="l'adresse mail est invalide. ";
+        myError.style.color = 'black';
+        e.preventDefault();
+        activeBouton = false ; 
+    };
+    //préparation d'un tableau des Id des produits du panier
     let products = [];
     for (let i=0; i< produits.length; i++){
         products.push(produits[i].id);
     }
+    // préparation de l'objet contact du formulaire
     let contact = {};
     contact.firstName= document.getElementById("firstName").value;
     contact.lastName= document.getElementById("lastName").value;
     contact.address= document.getElementById("address").value;
     contact.city = document.getElementById("city").value;
     contact.email = document.getElementById("email").value;
+    //les inf à envoyer à l'api taleau et contact
     let Aenvoyer = {
         products, contact
     }
-    let options =  fetch(Url +"/order",{
-             method: "POST",
-             body: JSON.stringify(Aenvoyer),
-             headers: {
-                 "Accept": "application/json",
-                 "Content-Type" : "application/json"
-             }
-         });
-         options.then(async(response)=>{
-            try{
-                const contenue = await response.json();
-                console.log(contenue)
-                //Si la réponse du serveur est OK
-                if (response.ok){
-                   let orderId = contenue.orderId ;
-                   console.log(orderId);
-                   window.location.href = "./confirmation.html?orderid=" + orderId ;
-                 
+    // si les champs sont bien formaté on peut envoyer à l'api 
+    if(activeBouton == true){
+        let options =  fetch(Url +"/order",{
+                method: "POST",
+                body: JSON.stringify(Aenvoyer),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type" : "application/json"
                 }
-            }
-            catch(e){
-                //On demande l'erreur dans la console
-                console.log(e);
-            }
-         })   
+            });
+            options.then(async(response)=>{
+                try{
+                    const contenue = await response.json();
+                    console.log(contenue)
+                    //Si la réponse du serveur est OK
+                    if (response.ok){
+                    let orderId = contenue.orderId ;
+                    console.log(orderId);
+                    // ouvrir la page de confirmation on passant dans l'url l'Id de la commande
+                    window.location.href = "./confirmation.html?orderid=" + orderId ;
+                    
+                    }
+                }
+                catch(e){
+                    //On demande l'erreur dans la console
+                    console.log(e);
+                }
+            }) 
+        }  
     
 
 };

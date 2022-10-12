@@ -1,3 +1,4 @@
+//récupération de l'id du produit qu'on l'a trouve dans l'url 
 let paramsString = window.location.search;
 let searchParams = new URLSearchParams (paramsString);
 const id = searchParams.get ("id");
@@ -19,7 +20,7 @@ fetch(apiProduit)
     .then(function(value) {
      
       
-  
+     // récupération des données d'un produit de l'api 
       document.getElementById('title').innerText = value.name;
       document.getElementById('price').innerText = value.price; 
       document.getElementById('description').innerText = value.description; 
@@ -42,10 +43,10 @@ fetch(apiProduit)
 let colorSelect = '';
 let quantity = 0;
 let button = document.getElementById('addToCart');
-
+// mettre le bouton non fonctionnel au début 
 button.disabled = true;
 
-
+// fonction qui retourne le couleur choisi par le client 
 function retour(e){
     e.stopPropagation();
     colorSelect = e.target.value;
@@ -58,7 +59,7 @@ function retour(e){
     }
   
 };
-
+// fonction qui retourne le couleur choisi par le client 
 function quantitys (e){
     e.stopPropagation();
     quantity = e.target.valueAsNumber;
@@ -70,20 +71,21 @@ function quantitys (e){
         button.disabled = false;
     }
 };
+// ajouter les ecouteur pour le choix du couleur et pour l'input du quantité saisi 
 elt.addEventListener('change', retour);
 document.getElementById('quantity').addEventListener('input', quantitys);
 
     let tableau = new Array;
-
+// création 'un tableau dans la localStorage pour stocker les produits 
  if (localStorage.produit != undefined){
     let produits = localStorage.getItem("produit");
     tableau = JSON.parse(produits); 
  };
 
-
+// ajouter un écouteur pour le bouton ajouter au panier 
 document.getElementById('addToCart').addEventListener('click', cart);
 
-
+// fonction qui s'active lors de du clic sur le bouton ajouter au panier et qui permet de créer le panier et stocké les produits sélectionnés dans la localStorage 
 function cart(){
     
     let produitSelect = new Object();
@@ -98,6 +100,7 @@ function cart(){
         tableau.push(produitSelect);  
     }else{
         for (let i=0;  i< tableau.length;  i++ ){
+            // si le produits est déja été sélectionner meme id et meme couleur modifer alors la quantité par la nouvelle et remplacer le produit existant par le nouveau modifié
             if ( tableau[i].id == produitSelect.id  && tableau[i].colorSelect == produitSelect.colorSelect ) {
                 x = tableau[i].quantity;
                 y = produitSelect.quantity;
@@ -107,11 +110,12 @@ function cart(){
                 found = true; 
             };
         };
+        // si il n'y a pas de produits dans le panier alors ajouter le nouveau 
         if (found == false){
             tableau.push(produitSelect);  
         }
     };
-
+    // stockage du tableau dans la localStorage pour le récupérer aprés dans la page panier 
     let produits = JSON.stringify(tableau);
     localStorage.setItem("produit",produits);
 
