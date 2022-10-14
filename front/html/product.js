@@ -97,7 +97,8 @@ function cart(){
     let found = false;
 
     if (tableau.length == 0){
-        tableau.push(produitSelect);  
+        tableau.push(produitSelect);
+        alert('le produit est ajouté au panier');  
     }else{
         for (let i=0;  i< tableau.length;  i++ ){
             // si le produits est déja été sélectionner meme id et meme couleur modifer alors la quantité par la nouvelle et remplacer le produit existant par le nouveau modifié
@@ -107,12 +108,14 @@ function cart(){
                 z = x + y ; 
                 produitSelect.quantity = z;
                 tableau.splice(i, 1 , produitSelect) ;
+                alert('le quantité du produit a été modifié dans le panier');
                 found = true; 
             };
         };
         // si il n'y a pas de produits dans le panier alors ajouter le nouveau 
         if (found == false){
             tableau.push(produitSelect);  
+            alert('le produit est ajouté au panier');
         }
     };
     // stockage du tableau dans la localStorage pour le récupérer aprés dans la page panier 
