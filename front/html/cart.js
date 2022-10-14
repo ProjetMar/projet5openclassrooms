@@ -198,6 +198,11 @@ document.getElementById('email').addEventListener("input", function(e) {
 function send (e){
     e.preventDefault();
     let activeBouton = true ; 
+    // vérification que le panier est n'est pas vide 
+    if (produits.length == 0){
+        activeBouton = false ; 
+        alert('le panier est vide');
+    }
     // verification de firstName
     let myRegex1 = /^[a-zA-Z-\s]+$/;
     let myRegex2 = /^([a-zA-Z0-9_-])+([.]?[a-zA-Z0-9_-]{1,})*@([a-zA-Z0-9-_]{2,}[.])+[a-zA-Z]{2,3}$/;
