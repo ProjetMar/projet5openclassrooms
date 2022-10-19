@@ -42,12 +42,17 @@ let quantity = 0;
 let button = document.getElementById('addToCart');
 // mettre le bouton non fonctionnel au début 
 button.disabled = true;
-
+button.style.color = 'grey';
+button.style.cursor = 'default'; 
 function CheckColorsAndQuantity(){
     if (document.getElementById('colors').value ==='' || document.getElementById('quantity').value === '0'){
         button.disabled = true ; 
+        button.style.color = 'grey';
+        button.style.cursor = 'default'; 
     }else{
         button.disabled = false; 
+        button.style.color = 'white';
+        button.style.cursor = 'pointer'; 
     }
 }
 
@@ -72,6 +77,8 @@ document.getElementById('addToCart').addEventListener('click', addTocart);
 
 // fonction qui s'active lors de du clic sur le bouton ajouter au panier et qui permet de créer le panier et stocké les produits sélectionnés dans la localStorage 
 function addTocart(){
+
+  
     
     let produitSelect = new Object();
 
@@ -87,6 +94,7 @@ function addTocart(){
             produitSelect.quantity += products_array[i].quantity;
             products_array.splice(i, 1 , produitSelect) ;
             alert('la quantité du produit a été modifiée dans le panier');
+            console.log(products_array);
             found = true; 
         };
     };
@@ -94,6 +102,7 @@ function addTocart(){
     if (found == false){
         products_array.push(produitSelect);  
         alert('le produit est ajouté au panier');
+        console.log(products_array);
     }
     // stockage du tableau dans la localStorage pour le récupérer aprés dans la page panier 
     localStorage.setItem("produit",JSON.stringify(products_array));
