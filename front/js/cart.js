@@ -1,4 +1,5 @@
 produits = JSON.parse(localStorage.produit);
+
 let cart = document.getElementById('cart__items');
 let totalAmount = 0; 
 let totalNumberItems = 0;
