@@ -6,7 +6,7 @@ const id = searchParams.get ("id");
 console.log(id) ;
 
 let logo = document.querySelector('article .item__img'); 
-logo.innerHTML = "<img src=" + "../images/logo.png" + " " + "alt=" + '"' + "Photographie d'un canapé" + '"'  + ">";
+
 let apiProduit = "http://localhost:3000/api/products/" + id; 
 
 let list_colors = document.getElementById('colors');
@@ -26,6 +26,7 @@ fetch(apiProduit)
         document.getElementById('title').innerText = value.name;
         document.getElementById('price').innerText = value.price; 
         document.getElementById('description').innerText = value.description; 
+        logo.innerHTML = "<img src='" + value.imageUrl + "'" + "alt=" +'" '+  value.altTxt +'"' + ">";
 
         //Ajouter la liste des couleurs d'un produit
         for (let i=0; i< value.colors.length ; i++){

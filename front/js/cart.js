@@ -114,16 +114,22 @@ function send (e){
     if(patternName.test( document.getElementById("firstName").value)==false){
         setElementMsg('firstNameErrorMsg', "le prénom doit comporter des lettres et des tirets uniquement. "); 
         activeBouton = false ; 
+    }else{
+        setElementMsg('firstNameErrorMsg', "");
     }
     // verification de lastName
     if(patternName.test(document.getElementById("lastName").value)==false){
         setElementMsg('lastNameErrorMsg', "le nom doit comporter des lettres et des tirets uniquement. ");
         activeBouton = false ; 
+    }else{
+        setElementMsg('lastNameErrorMsg',"");
     }
     // verification de email
     if(patternEmail.test(document.getElementById("email").value)==false){
         setElementMsg('emailErrorMsg', "l'adresse mail est invalide. ");
         activeBouton = false ; 
+    }else{
+        setElementMsg('emailErrorMsg',"");
     }
     
     // si les champs sont bien formatés on peut envoyer à l'api 
