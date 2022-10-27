@@ -1,4 +1,6 @@
-produits = JSON.parse(localStorage.produit);
+if (localStorage.produit != undefined){
+    produits = JSON.parse(localStorage.produit);
+}
 
 let cart = document.getElementById('cart__items');
 let totalAmount = 0; 
@@ -22,7 +24,11 @@ fetch(Url)
             for (let j=0; j< value.length ; j++){
                 if (produits[i].id == value[j]._id){
 
-                    cart.innerHTML += "<article class= \"cart__item\" data-id=" + produits[i].id + " data-color =" + produits[i].colorSelect + "> <div class=\"cart__item__img\"><img src='" + value[j].imageUrl + "'alt=" +'"' + value[i].altTxt +'"' + "></div><div class=\"cart__item__content\"><div class=\"cart__item__content__description\"><h2>" + value[j].name + "</h2><p>" + produits[i].colorSelect + "</p><p>"+ value[j].price  + "€</p></div><div class=\"cart__item__content__settings\"><div class=\"cart__item__content__settings__quantity\"><p>Qté : </p><input type=\"number\" class=\"itemQuantity\" name=\"itemQuantity\" min=\"1\" max=\"100\" value=" + produits[i].quantity +"></div><div class=\"cart__item__content__settings__delete\"><p class=\"deleteItem\">Supprimer</p></div></div></div></article>";
+                    cart.innerHTML += "<article class= \"cart__item\" data-id=" + produits[i].id + " data-color =" + produits[i].colorSelect + "> <div class=\"cart__item__img\"><img src='" 
+                                    + value[j].imageUrl + "'alt=" +'"' + value[i].altTxt +'"' + "></div><div class=\"cart__item__content\"><div class=\"cart__item__content__description\"><h2>" 
+                                    + value[j].name + "</h2><p>" + produits[i].colorSelect + "</p><p>"+ value[j].price  
+                                    + "€</p></div><div class=\"cart__item__content__settings\"><div class=\"cart__item__content__settings__quantity\"><p>Qté : </p><input type=\"number\" class=\"itemQuantity\" name=\"itemQuantity\" min=\"1\" max=\"100\" value="
+                                    + produits[i].quantity +"></div><div class=\"cart__item__content__settings__delete\"><p class=\"deleteItem\">Supprimer</p></div></div></div></article>";
                     totalAmount += value[j].price * produits[i].quantity;
                     totalNumberItems += produits[i].quantity;
                     prices.push(value[j].price);
@@ -105,7 +111,7 @@ function send (e){
     e.preventDefault();
     let activeBouton = true ; 
     // vérification que le panier est n'est pas vide 
-    if (produits.length == 0){
+    if (localStorage.produit == undefined || produits.length == 0){
         activeBouton = false ; 
         alert('le panier est vide');
     }
