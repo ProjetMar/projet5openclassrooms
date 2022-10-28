@@ -46,7 +46,7 @@ button.disabled = true;
 button.style.color = 'grey';
 button.style.cursor = 'default'; 
 function CheckColorsAndQuantity(){
-    if (document.getElementById('colors').value ==='' || document.getElementById('quantity').value === '0'){
+    if (document.getElementById('colors').value ==='' || document.getElementById('quantity').valueAsNumber <= 0 || document.getElementById('quantity').valueAsNumber>100){
         button.disabled = true ; 
         button.style.color = 'grey';
         button.style.cursor = 'default'; 
@@ -93,8 +93,12 @@ function addTocart(){
         // si le produits est déja été sélectionner meme id et meme couleur modifer alors la quantité par la nouvelle et remplacer le produit existant par le nouveau modifié
         if ( products_array[i].id == produitSelect.id  && products_array[i].colorSelect == produitSelect.colorSelect ) {
             produitSelect.quantity += products_array[i].quantity;
-            products_array.splice(i, 1 , produitSelect) ;
-            alert('la quantité du produit a été modifiée dans le panier');
+            if (produitSelect.quantity <= 100){
+                products_array.splice(i, 1 , produitSelect) ;
+                alert('la quantité du produit a été modifiée dans le panier');
+            } else {
+                alert('la quantité du produit n\'a pas été modifiée dans le panier car elle dépasse 100');
+            }
             console.log(products_array);
             found = true; 
         };
